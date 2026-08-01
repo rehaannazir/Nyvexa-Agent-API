@@ -8,6 +8,6 @@ def passward_hash(passward: str):
     return pswd.hash(passward)
 
 
-def passward_verify(hash_passward, plain_passward):
+def passward_verify(plain_passward, hash_passward):
 
-    return pswd.verify(hash_passward, plain_passward)
+    return pswd.verify(plain_passward, hash_passward)

@@ -5,7 +5,7 @@ from app.models.user import User
 class UserRepo:
 
     @staticmethod
-    def create_user(user: User, session: Session):
+    def create_user(session: Session, user: User):
         session.add(user)
         session.commit()
         session.refresh(user)
@@ -33,7 +33,7 @@ class UserRepo:
         return user
 
     @staticmethod
-    def delete_user(user: User, session: Session):
+    def delete_user(session: Session, user: User):
 
         session.delete(user)
         session.commit()

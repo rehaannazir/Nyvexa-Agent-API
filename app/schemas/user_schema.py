@@ -15,13 +15,6 @@ class UserLogin(BaseModel):
     passward: str
 
 
-class UserResponse(BaseModel):
-    id: int
-    username: str
-    email: EmailStr
-    created_at: datetime
-
-
 class UserNameUpdate(BaseModel):
     old_username: str
     new_username: str
