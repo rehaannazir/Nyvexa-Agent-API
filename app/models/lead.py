@@ -1,28 +1,29 @@
-from pydantic import BaseModel, Field, EmailStr
-from typing import Optional, Literal
+import enum
+from typing import Optional
+from sqlmodel import SQLModel, Field
+from pydantic import EmailStr
 
 
-class Lead(BaseModel):
+class UrgencyLevel(str, enum.Enum):
+    normal = "normal"
+    urgent = "urgent"
+    very_urgent = "very urgent"
 
-    name: str = Field(description="Name of person who contact/message")
-    company: str = Field(description="Company or organisation name whom he belongs")
+
+class LeadBase(SQLModel):
+    name: str = Field(description="Name of person who contacted you")
+    company: str = Field(description="Company or organization name")
     email: Optional[EmailStr] = Field(
-        description="Email address of person", default=None
+        default=None,
     )
-    headcount: Optional[int] = Field(
-        description="No of employees in company", default=None
-    )
-    intent: str = Field(
-        description="Purpose of contact like one wants any service, support, demo or meeting"
-    )
+    headcount: Optional[int] = Field(default=None, description="No of employees")
+    intent: str = Field(description="Purpose of contact")
     follow_up: Optional[str] = Field(
-        description="When we need to follow up him", default="1 day"
+        default="1 day", description="time to contact back"
     )
-    urgency: Literal["medium", "urgent", "very urgent"] = Field(
-        description="From tone/emotion/words of message, urgency of lead"
-    )
+    urgency: UrgencyLevel = Field(description="Lead urgency")
 
 
-class LeadRequest(BaseModel):
-
-    text: str
+class Lead(LeadBase, table=True):
+    no: int = Field(primary_key=True, default=None)
+    user_id: int = Field(foreign_key="user.user_id")

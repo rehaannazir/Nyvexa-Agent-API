@@ -1,6 +1,6 @@
 from langchain_core.prompts import ChatPromptTemplate
 from app.core.llm import get_llm
-from app.models.lead import Lead
+from app.schemas.lead_schema import LeadExtraction
 
 SYSTEM_PROMPT = """You are a production-grade lead extraction engine.
 
@@ -32,7 +32,7 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-llm = get_llm().with_structured_output(Lead).with_retry(stop_after_attempt=3)
+llm = get_llm().with_structured_output(LeadExtraction).with_retry(stop_after_attempt=3)
 
 
 extract_lead_chain = prompt | llm

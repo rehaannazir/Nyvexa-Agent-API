@@ -7,6 +7,7 @@ from sqlmodel import Session
 
 class AuthService:
 
+    @staticmethod
     def register_user(session: Session, username, email, passward):
 
         validate_password(passward)
@@ -23,6 +24,7 @@ class AuthService:
 
         return UserRepo.create_user(session, user)
 
+    @staticmethod
     def authenticate_user(session: Session, email, passward):
 
         user = UserRepo.get_user_by_email(session, email)
@@ -37,6 +39,7 @@ class AuthService:
 
         return user
 
+    @staticmethod
     def update_username(old_username, new_username, session: Session):
 
         if UserRepo.get_user_by_name(session, new_username):
@@ -51,6 +54,7 @@ class AuthService:
 
         return UserRepo.update_user(session, user)
 
+    @staticmethod
     def update_email(old_email, new_email, session: Session):
 
         if UserRepo.get_user_by_email(session, new_email):

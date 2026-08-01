@@ -1,8 +1,10 @@
-from app.core.config import setting
+from app.core.config import get_setting
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
+
+setting = get_setting()
 
 
 def get_llm(model: str = None, temperature: float = None):

@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 class User(SQLModel, table=True):
 
-    id: Optional[int] = Field(primary_key=True, default=None)
+    user_id: Optional[int] = Field(primary_key=True, default=None)
     username: str
     email: EmailStr
     passward_hash: str
