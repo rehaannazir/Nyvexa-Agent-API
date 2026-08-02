@@ -8,3 +8,19 @@
 2026-08-02 07:40:06,839 | INFO | httpx | HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK"
 2026-08-02 07:40:06,841 | INFO | httpx | HTTP Request: POST http://testserver/leads/extract "HTTP/1.1 401 Unauthorized"
 2026-08-02 07:40:06,842 | INFO | nyvexa | Nyvexa Ops API shutting down.
+2026-08-02 08:04:39,113 | INFO | nyvexa | Database tables created (or already exist).
+2026-08-02 08:04:39,114 | INFO | nyvexa | Nyvexa Ops API started.
+2026-08-02 08:04:39,498 | INFO | nyvexa | User 'streamuser_38213122' registered successfully.
+2026-08-02 08:04:39,501 | INFO | httpx | HTTP Request: POST http://testserver/auth/register "HTTP/1.1 201 Created"
+2026-08-02 08:04:39,845 | INFO | nyvexa | User 'streamuser_38213122' logged in successfully.
+2026-08-02 08:04:39,848 | INFO | httpx | HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK"
+2026-08-02 08:04:39,862 | INFO | nyvexa | Assistant request from session 'streamuser_38213122'.
+2026-08-02 08:04:42,686 | INFO | nyvexa | Assistant response ready for session 'streamuser_38213122'.
+2026-08-02 08:04:42,689 | INFO | httpx | HTTP Request: POST http://testserver/assistant/ "HTTP/1.1 200 OK"
+2026-08-02 08:04:42,694 | INFO | nyvexa | Assistant request from session 'streamuser_38213122'.
+2026-08-02 08:04:44,512 | INFO | httpx | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:countTokens "HTTP/1.1 200 OK"
+2026-08-02 08:04:44,717 | INFO | httpx | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:countTokens "HTTP/1.1 200 OK"
+2026-08-02 08:04:45,748 | INFO | nyvexa | Calling tool 'calculator' with args: {'y': 6, 'x': 47, 'op': 'multiply'}
+2026-08-02 08:04:46,436 | INFO | nyvexa | Assistant response ready for session 'streamuser_38213122'.
+2026-08-02 08:04:46,438 | INFO | httpx | HTTP Request: POST http://testserver/assistant/ "HTTP/1.1 200 OK"
+2026-08-02 08:04:46,438 | INFO | nyvexa | Nyvexa Ops API shutting down.
