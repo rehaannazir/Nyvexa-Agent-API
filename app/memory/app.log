@@ -20,3 +20,11 @@
 2026-08-02 09:37:13,152 | INFO | nyvexa | Assistant response ready for session 'liveuser_06d0bdb1'.
 2026-08-02 09:37:13,154 | INFO | httpx | HTTP Request: POST http://testserver/assistant/ "HTTP/1.1 200 OK"
 2026-08-02 09:37:13,156 | INFO | nyvexa | Nyvexa Ops API shutting down.
+2026-08-02 05:30:08,718 | INFO | nyvexa | Database tables created (or already exist).
+2026-08-02 05:30:08,722 | INFO | nyvexa | Nyvexa Ops API started.
+2026-08-02 05:31:17,314 | INFO | nyvexa | Nyvexa Ops API shutting down.
+2026-08-02 05:31:27,243 | INFO | nyvexa | Database tables created (or already exist).
+2026-08-02 05:31:27,246 | INFO | nyvexa | Nyvexa Ops API started.
+2026-08-02 05:32:02,213 | INFO | nyvexa | Nyvexa Ops API shutting down.
+2026-08-02 18:06:00,145 | INFO | nyvexa | Database tables created (or already exist).
+2026-08-02 18:06:00,149 | INFO | nyvexa | Nyvexa Ops API started.
