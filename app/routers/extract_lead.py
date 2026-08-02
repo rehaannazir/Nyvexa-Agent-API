@@ -15,18 +15,16 @@ router = APIRouter(prefix="/leads", tags=["Lead Extraction"])
 @router.post("/extract", response_model=Lead, status_code=status.HTTP_200_OK)
 async def extract_lead(
     lead_message: LeadRequest,
-    user: User = Depends(get_user),
-    session: Session = Depends(get_session),
+    user: User = Depends(get_user()),
+    session: Session = Depends(get_session()),
 ):
 
-    lead_data = await LeadService.lead_extraction(lead_message)
+    lead = LeadService(lead_message, user, session)
 
-    if not lead_data:
+    if not lead:
         raise HTTPException(
             detail="Error! Model is not working well.",
             status_code=status.HTTP_404_NOT_FOUND,
         )
 
-    lead = Lead(user_id=user.user_id, **lead_data.model_dump())
-
-    return LeadRepo.add_response(session, lead)
+    return lead

@@ -17,7 +17,7 @@ Rules:
 
 USER_PROMPT = """Extract the lead information from the following text.
 Text:
-{query}"""
+{text}"""
 
 prompt = ChatPromptTemplate.from_messages(
     [
