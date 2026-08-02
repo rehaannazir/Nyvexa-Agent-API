@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.core.database import create_table
+from app.core.logging import logger
 from app.routers.auth import router as auth_router
 from app.routers.extract_lead import router as lead_router
 from app.routers.summarize import router as summary_router
@@ -11,7 +12,9 @@ from app.routers.assistant import router as assistant_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     create_table()
+    logger.info("Nyvexa Ops API started.")
     yield
+    logger.info("Nyvexa Ops API shutting down.")
 
 
 app = FastAPI(

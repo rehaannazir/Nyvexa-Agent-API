@@ -1,5 +1,6 @@
 from app.utils.history import get_session_history
 from app.core.llm import get_llm
+from app.core.logging import logger
 from langchain_core.messages import SystemMessage
 
 
@@ -13,6 +14,10 @@ async def compact_history(session_id: str):
 
     if total_tokens <= 1000:
         return
+
+    logger.info(
+        "Compacting history for session '%s' (%d tokens).", session_id, total_tokens
+    )
 
     recent_msgs = []
     recent_tokens = 0
@@ -41,3 +46,5 @@ async def compact_history(session_id: str):
 
     for msg in reversed(recent_msgs):
         await history.aadd_message(msg)
+
+    logger.info("History compacted for session '%s'.", session_id)

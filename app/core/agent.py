@@ -6,6 +6,7 @@ from app.chains.assistant import assistant_chain, llm
 from app.utils.history import get_session_history
 from app.utils.compact import compact_history
 from app.utils.tool_loop import loop
+from app.core.logging import logger
 
 agent = RunnableWithMessageHistory(
     runnable=assistant_chain,
@@ -17,6 +18,8 @@ agent = RunnableWithMessageHistory(
 
 async def get_response(text: str, session_id: str) -> str:
 
+    logger.info("Assistant request from session '%s'.", session_id)
+
     history = get_session_history(session_id)
 
     await compact_history(session_id)
@@ -26,4 +29,7 @@ async def get_response(text: str, session_id: str) -> str:
         config={"configurable": {"session_id": session_id}},
     )
 
-    return await loop(agent_response, llm, history)
+    final_response = await loop(agent_response, llm, history)
+    logger.info("Assistant response ready for session '%s'.", session_id)
+
+    return final_response

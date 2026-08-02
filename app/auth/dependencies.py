@@ -5,6 +5,7 @@ from app.auth.jwt_handler import decode_access_token
 from app.core.database import get_session
 from app.models.user import User
 from app.repositories.user_repo import UserRepo
+from app.core.logging import logger
 
 security = HTTPBearer()
 
@@ -21,6 +22,7 @@ def get_user(
 
     if not username:
 
+        logger.warning("Rejected request: invalid or undecodable token.")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Token Invalid"
         )
@@ -29,6 +31,7 @@ def get_user(
 
     if not user:
 
+        logger.warning("Rejected request: token valid but user '%s' not found.", username)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
         )
