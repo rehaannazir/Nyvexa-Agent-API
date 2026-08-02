@@ -1,15 +1,32 @@
+# Web framework
 fastapi==0.141.1
 uvicorn==0.52.0
-sqlmodel==0.0.39
-pydantic-settings==2.14.2
-python-dotenv==1.2.2
-langchain-core==1.5.3
-langchain-google-genai==4.3.2
-passlib==1.7.4
-bcrypt==4.0.1
-python-jose[cryptography]==3.5.0
-email-validator==2.3.0
-aiosqlite==0.22.1
-pytest==9.1.1
 sse-starlette==3.4.6
 slowapi==0.1.10
+
+# Database / ORM
+sqlmodel==0.0.39
+sqlalchemy==2.0.51
+aiosqlite==0.22.1
+
+# Validation / config
+pydantic==2.13.4
+pydantic-settings==2.14.2
+email-validator==2.3.0
+
+# Auth
+passlib==1.7.4
+bcrypt==4.0.1
+python-jose==3.5.0
+
+# Env
+python-dotenv==1.2.2
+
+# LLM / LangChain
+langchain-core==1.5.3
+langchain-community==0.4.2
+langchain-google-genai==4.3.2
+
+# Testing
+pytest==9.1.1
+httpx==0.28.1
