@@ -8,6 +8,12 @@ from app.routers.extract_lead import router as lead_router
 from app.routers.summarize import router as summary_router
 from app.routers.assistant import router as assistant_router
 
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.errors import RateLimitExceeded
+from slowapi import _rate_limit_exceeded_handler
+
+from app.core.limiter import limiter
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -28,6 +34,15 @@ app.include_router(auth_router)
 app.include_router(lead_router)
 app.include_router(summary_router)
 app.include_router(assistant_router)
+
+app.state.limiter = limiter
+
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler,
+)
+
+app.add_middleware(SlowAPIMiddleware)
 
 
 @app.get("/")

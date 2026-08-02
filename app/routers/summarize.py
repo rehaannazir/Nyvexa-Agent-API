@@ -8,12 +8,17 @@ from app.auth.dependencies import get_user
 from app.core.database import get_session
 from app.services.summary_services import SummaryService
 
+from fastapi import Request
+from app.core.limiter import limiter
+
 router = APIRouter(prefix="/summary", tags=["Summarizer"])
 
 
 @router.post("/", response_model=Summary, status_code=status.HTTP_200_OK)
+@limiter.limit("10/minute")
 async def get_summary(
     text: SummaryRequest,
+    request: Request,
     session: Session = Depends(get_session),
     user: User = Depends(get_user),
 ):

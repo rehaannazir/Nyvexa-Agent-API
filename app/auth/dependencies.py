@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, Request, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlmodel import Session
 from app.auth.jwt_handler import decode_access_token
@@ -11,6 +11,7 @@ security = HTTPBearer()
 
 
 def get_user(
+    request: Request,
     credential: HTTPAuthorizationCredentials = Depends(security),
     session: Session = Depends(get_session),
 ) -> User:
@@ -35,5 +36,7 @@ def get_user(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
         )
+
+    request.state.user = user
 
     return user

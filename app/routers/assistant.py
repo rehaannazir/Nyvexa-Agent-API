@@ -9,16 +9,21 @@ from app.schemas.assistant_schema import AssistantRequest
 from app.core.agent import get_response
 from sse_starlette import EventSourceResponse
 
+from fastapi import Request
+from app.core.limiter import limiter
+
 router = APIRouter(prefix="/assistant", tags=["AI Assistant"])
 
 
 @router.post("/", status_code=status.HTTP_200_OK)
+@limiter.limit("20/minute")
 async def get_answer(
-    request: AssistantRequest,
+    request: Request,
+    chat: AssistantRequest,
     user: User = Depends(get_user),
 ):
     async def event_generator():
-        async for event in get_response(request.message, user.username):
+        async for event in get_response(chat.message, user.username):
             await asyncio.sleep(0.02)
             yield {"data": json.dumps(event)}
 

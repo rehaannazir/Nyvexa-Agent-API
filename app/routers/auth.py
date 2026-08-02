@@ -11,11 +11,15 @@ from app.core.database import get_session
 from fastapi import HTTPException, status, Depends
 from fastapi.routing import APIRouter
 
+from fastapi import Request
+from app.core.limiter import limiter
+
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
-def register_user(user: UserCreate, session=Depends(get_session)):
+@limiter.limit("3/minute")
+def register_user(user: UserCreate, request: Request, session=Depends(get_session)):
 
     user = AuthService.register_user(session, user.name, user.email, user.passward)
 
@@ -29,7 +33,8 @@ def register_user(user: UserCreate, session=Depends(get_session)):
 
 
 @router.post("/login", status_code=status.HTTP_200_OK, response_model=TokenResponse)
-def login_user(user: UserLogin, session=Depends(get_session)):
+@limiter.limit("3/minute")
+def login_user(user: UserLogin, request: Request, session=Depends(get_session)):
 
     user_b = AuthService.authenticate_user(session, user.email, user.passward)
 
