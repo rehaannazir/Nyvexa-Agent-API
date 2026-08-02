@@ -15,11 +15,11 @@ router = APIRouter(prefix="/leads", tags=["Lead Extraction"])
 @router.post("/extract", response_model=Lead, status_code=status.HTTP_200_OK)
 async def extract_lead(
     lead_message: LeadRequest,
-    user: User = Depends(get_user()),
-    session: Session = Depends(get_session()),
+    user: User = Depends(get_user),
+    session: Session = Depends(get_session),
 ):
 
-    lead = LeadService(lead_message, user, session)
+    lead = await LeadService.lead_extraction(lead_message, session, user)
 
     if not lead:
         raise HTTPException(

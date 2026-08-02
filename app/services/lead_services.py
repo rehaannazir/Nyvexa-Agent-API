@@ -14,11 +14,11 @@ class LeadService:
         message: LeadRequest, session: Session, user: User
     ) -> Optional[Lead]:
 
-        response = await extract_lead_chain.ainvoke({"query": message.text})
+        response = await extract_lead_chain.ainvoke({"text": message.text})
 
         if not response:
             return None
 
-        lead = Lead(no=user.user_id, **response.model_dump())
+        lead = Lead(user_id=user.user_id, **response.model_dump())
 
         return LeadRepo.add_response(session, lead)

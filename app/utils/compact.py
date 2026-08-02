@@ -8,7 +8,7 @@ async def compact_history(session_id: str):
     history = get_session_history(session_id)
     llm_instance = get_llm()
 
-    messages = history.messages
+    messages = await history.aget_messages()
     total_tokens = llm_instance.get_num_tokens_from_messages(messages)
 
     if total_tokens <= 1000:
@@ -36,8 +36,8 @@ async def compact_history(session_id: str):
 
     summary = await llm_instance.ainvoke(summary_msgs)
 
-    history.clear()
-    history.add_message(SystemMessage(content=summary.content))
+    await history.aclear()
+    await history.aadd_message(SystemMessage(content=summary.content))
 
     for msg in reversed(recent_msgs):
-        history.add_message(msg)
+        await history.aadd_message(msg)

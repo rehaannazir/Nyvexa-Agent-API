@@ -14,13 +14,13 @@ async def loop(agent_response, llm, history):
             tool = tool_use[call["name"]]
             result = tool.invoke(call["args"])
 
-            history.add_message(
+            await history.aadd_message(
                 ToolMessage(
                     content=json.dumps(result, default=str), tool_call_id=call["id"]
                 )
             )
 
-        agent_response = await llm.ainvoke(history.messages)
-        history.add_message(agent_response)
+        agent_response = await llm.ainvoke(await history.aget_messages())
+        await history.aadd_message(agent_response)
 
     return agent_response.content

@@ -9,7 +9,9 @@ def get_session_history(session_id):
 
     if session_id not in store:
         store[session_id] = SQLChatMessageHistory(
-            session_id=session_id, connection=f"sqlite:///{DB_PATH}"
+            session_id=session_id,
+            connection=f"sqlite+aiosqlite:///{DB_PATH}",
+            async_mode=True,
         )
 
     return store[session_id]

@@ -1,10 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts import MessagesPlaceholder
-from app.core.config import get_setting
 from app.core.llm import get_llm
 from app.tools.tools import TOOLS
-
-setting = get_setting()
 
 SYSTEM_PROMPT = """
 You are Nexara Ops Assistant, an AI operations assistant designed to help users manage contacts, schedules, and perform calculations.
@@ -39,7 +36,7 @@ User Request:
 llm = get_llm().bind_tools(TOOLS).with_retry(stop_after_attempt=3)
 
 prompt = ChatPromptTemplate.from_messages(
-    ("system", SYSTEM_PROMPT), MessagesPlaceholder("history"), ("human", USER_PROMPT)
+    [("system", SYSTEM_PROMPT), MessagesPlaceholder("history"), ("human", USER_PROMPT)]
 )
 
 assistant_chain = prompt | llm

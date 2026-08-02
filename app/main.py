@@ -5,6 +5,7 @@ from app.core.database import create_table
 from app.routers.auth import router as auth_router
 from app.routers.extract_lead import router as lead_router
 from app.routers.summarize import router as summary_router
+from app.routers.assistant import router as assistant_router
 
 
 @asynccontextmanager
@@ -23,6 +24,7 @@ app = FastAPI(
 app.include_router(auth_router)
 app.include_router(lead_router)
 app.include_router(summary_router)
+app.include_router(assistant_router)
 
 
 @app.get("/")

@@ -32,7 +32,7 @@ llm = (
 )
 
 prompt = ChatPromptTemplate.from_messages(
-    ("system", SYSTEM_PROMPT), ("human", USER_PROMPT)
+    [("system", SYSTEM_PROMPT), ("human", USER_PROMPT)]
 )
 
 chain_summary = prompt | llm
