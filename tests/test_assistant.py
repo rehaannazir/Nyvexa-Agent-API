@@ -27,7 +27,7 @@ def test_assistant_streams_the_reply():
     # Our own fake version of get_response. Just like the real one,
     # it's an "async generator" - instead of returning one value, it
     # yields several small pieces one at a time.
-    async def fake_get_response(text, session_id):
+    async def fake_get_response(text, session_id, request):
         yield {"type": "token", "content": "Hi there!"}
         yield {"type": "token", "content": " How can I help?"}
 
@@ -50,7 +50,7 @@ def test_assistant_streams_tool_call_events():
     headers = register_and_login(client)
 
     # Pretend the AI used the calculator tool before answering.
-    async def fake_get_response(text, session_id):
+    async def fake_get_response(text, session_id, request):
         yield {"type": "tool_call", "tool": "calculator"}
         yield {"type": "token", "content": "96"}
 

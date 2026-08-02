@@ -2,11 +2,12 @@ import json
 from langchain_core.messages import ToolMessage
 from app.tools.tools import TOOLS
 from app.core.logging import logger
+from app.utils.usage import accumulate_usage
 
 tool_use = {tool.name: tool for tool in TOOLS}
 
 
-async def loop(agent_response, llm, history):
+async def loop(agent_response, llm, history, request):
     """
     Runs tool calls requested by `agent_response`, then streams the
     model's follow-up response. Repeats until the model stops asking
@@ -47,5 +48,7 @@ async def loop(agent_response, llm, history):
 
             if chunk.content:
                 yield {"type": "token", "content": chunk.content}
+
+        accumulate_usage(request, agent_response)
 
         await history.aadd_message(agent_response)

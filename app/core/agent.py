@@ -1,11 +1,14 @@
+import time
 from datetime import datetime
 
+from fastapi import Request
 from langchain_core.runnables import RunnableWithMessageHistory
 
 from app.chains.assistant import assistant_chain, llm
 from app.utils.history import get_session_history
 from app.utils.compact import compact_history
 from app.utils.tool_loop import loop
+from app.utils.usage import accumulate_usage, log_token_usage
 from app.core.logging import logger
 
 agent = RunnableWithMessageHistory(
@@ -16,7 +19,7 @@ agent = RunnableWithMessageHistory(
 )
 
 
-async def get_response(text: str, session_id: str):
+async def get_response(text: str, session_id: str, request: Request):
     """
     Streams the assistant's reply for `text` as a series of small
     events, so the caller can forward them to the client as they
@@ -29,6 +32,8 @@ async def get_response(text: str, session_id: str):
     """
 
     logger.info("Assistant request from session '%s'.", session_id)
+
+    start = time.perf_counter()
 
     history = get_session_history(session_id)
 
@@ -45,7 +50,12 @@ async def get_response(text: str, session_id: str):
         if chunk.content:
             yield {"type": "token", "content": chunk.content}
 
-    async for event in loop(full_response, llm, history):
+    accumulate_usage(request, full_response)
+
+    async for event in loop(full_response, llm, history, request):
         yield event
+
+    elapsed = (time.perf_counter() - start) * 1000
+    log_token_usage(request, elapsed)
 
     logger.info("Assistant response ready for session '%s'.", session_id)

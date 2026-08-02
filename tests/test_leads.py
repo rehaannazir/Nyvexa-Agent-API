@@ -41,7 +41,7 @@ def test_extract_lead_returns_lead_information():
     # Our own fake version of lead_extraction. It looks like the real
     # one (it's "async" and takes the same arguments) but instead of
     # calling the AI, it just returns fake_lead straight away.
-    async def fake_lead_extraction(message, session, user):
+    async def fake_lead_extraction(message, session, user, request):
         return fake_lead
 
     # Remember the real function so we can put it back afterwards.
@@ -81,7 +81,7 @@ def test_extract_lead_returns_404_if_the_model_fails():
     headers = register_and_login(client)
 
     # This time, pretend the AI could not extract anything useful.
-    async def fake_lead_extraction(message, session, user):
+    async def fake_lead_extraction(message, session, user, request):
         return None
 
     real_lead_extraction = lead_services_module.LeadService.lead_extraction

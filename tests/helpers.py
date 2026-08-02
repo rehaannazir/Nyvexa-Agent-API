@@ -3,6 +3,7 @@ from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
 from app.core.database import get_session
+from app.core.limiter import limiter
 from app.main import app
 
 
@@ -29,6 +30,14 @@ def make_test_client():
     # Tell the app: "whenever you need a database session, use this
     # test one instead of the real one."
     app.dependency_overrides[get_session] = get_test_session
+
+    # Every request made through TestClient looks like it comes from the
+    # same fake IP ("testclient"), so without this, the rate limiter
+    # would treat the whole test suite as one client and later tests
+    # would start failing with 429 Too Many Requests once earlier tests
+    # used up the quota. Resetting it here gives each test a clean slate,
+    # just like the fresh database above.
+    limiter.reset()
 
     return TestClient(app)
 

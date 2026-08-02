@@ -32,7 +32,7 @@ def test_summary_returns_a_summary():
     )
 
     # Our own fake version of fetch_summary.
-    async def fake_fetch_summary(text, session, user):
+    async def fake_fetch_summary(text, session, user, request):
         return fake_summary
 
     real_fetch_summary = summary_services_module.SummaryService.fetch_summary
@@ -67,7 +67,7 @@ def test_summary_returns_404_if_the_model_fails():
     headers = register_and_login(client)
 
     # This time, pretend the AI could not summarize the text.
-    async def fake_fetch_summary(text, session, user):
+    async def fake_fetch_summary(text, session, user, request):
         return None
 
     real_fetch_summary = summary_services_module.SummaryService.fetch_summary

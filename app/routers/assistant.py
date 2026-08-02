@@ -23,7 +23,7 @@ async def get_answer(
     user: User = Depends(get_user),
 ):
     async def event_generator():
-        async for event in get_response(chat.message, user.username):
+        async for event in get_response(chat.message, user.username, request):
             await asyncio.sleep(0.02)
             yield {"data": json.dumps(event)}
 

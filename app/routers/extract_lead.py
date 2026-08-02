@@ -24,7 +24,7 @@ async def extract_lead(
     session: Session = Depends(get_session),
 ):
 
-    lead = await LeadService.lead_extraction(lead_message, session, user)
+    lead = await LeadService.lead_extraction(lead_message, session, user, request)
 
     if not lead:
         raise HTTPException(

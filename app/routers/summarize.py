@@ -22,7 +22,7 @@ async def get_summary(
     session: Session = Depends(get_session),
     user: User = Depends(get_user),
 ):
-    summary = await SummaryService.fetch_summary(text, session, user)
+    summary = await SummaryService.fetch_summary(text, session, user, request)
 
     if not summary:
 
