@@ -1,18 +1,18 @@
 # These tests check the /leads/extract endpoint.
-#
 # Instead of really calling the Gemini AI model (which costs money and
-# needs internet), we "fake" its answer using monkeypatch. This lets us
-# test that our own code (the endpoint, the auth check, the response
-# format) works correctly, quickly and for free.
+# needs internet), we temporarily replace the function that calls it
+# with our own simple fake function that just returns pretend data.
+# We save the real function first, and put it back at the end of the
+# test, so it doesn't affect any other test.
 
-from unittest.mock import AsyncMock
-
+import app.services.lead_services as lead_services_module
 from app.models.lead import Lead, UrgencyLevel
-from app.services.lead_services import LeadService
-from tests.helpers import register_and_login
+from tests.helpers import make_test_client, register_and_login
 
 
-def test_extract_lead_without_logging_in_fails(client):
+def test_extract_lead_without_logging_in_fails():
+
+    client = make_test_client()
 
     # No "Authorization" header is sent, so this should be rejected.
     response = client.post("/leads/extract", json={"text": "Hello, I need help."})
@@ -20,11 +20,12 @@ def test_extract_lead_without_logging_in_fails(client):
     assert response.status_code == 401
 
 
-def test_extract_lead_returns_lead_information(client, monkeypatch):
+def test_extract_lead_returns_lead_information():
 
+    client = make_test_client()
     headers = register_and_login(client)
 
-    # Pretend the AI already extracted this lead from the text.
+    # This is the pretend lead we want the "AI" to return.
     fake_lead = Lead(
         no=1,
         user_id=1,
@@ -36,7 +37,18 @@ def test_extract_lead_returns_lead_information(client, monkeypatch):
         follow_up="1 day",
         urgency=UrgencyLevel.normal,
     )
-    monkeypatch.setattr(LeadService, "lead_extraction", AsyncMock(return_value=fake_lead))
+
+    # Our own fake version of lead_extraction. It looks like the real
+    # one (it's "async" and takes the same arguments) but instead of
+    # calling the AI, it just returns fake_lead straight away.
+    async def fake_lead_extraction(message, session, user):
+        return fake_lead
+
+    # Remember the real function so we can put it back afterwards.
+    real_lead_extraction = lead_services_module.LeadService.lead_extraction
+
+    # Swap the real function for our fake one.
+    lead_services_module.LeadService.lead_extraction = fake_lead_extraction
 
     response = client.post(
         "/leads/extract",
@@ -44,13 +56,17 @@ def test_extract_lead_returns_lead_information(client, monkeypatch):
         headers=headers,
     )
 
+    # Put the real function back so it doesn't affect other tests.
+    lead_services_module.LeadService.lead_extraction = real_lead_extraction
+
     assert response.status_code == 200
     assert response.json()["name"] == "John Doe"
     assert response.json()["company"] == "Acme Corp"
 
 
-def test_extract_lead_needs_a_text_field(client):
+def test_extract_lead_needs_a_text_field():
 
+    client = make_test_client()
     headers = register_and_login(client)
 
     # We forgot to include "text" in the request body.
@@ -59,17 +75,24 @@ def test_extract_lead_needs_a_text_field(client):
     assert response.status_code == 422
 
 
-def test_extract_lead_returns_404_if_the_model_fails(client, monkeypatch):
+def test_extract_lead_returns_404_if_the_model_fails():
 
+    client = make_test_client()
     headers = register_and_login(client)
 
-    # Pretend the AI could not extract anything useful.
-    monkeypatch.setattr(LeadService, "lead_extraction", AsyncMock(return_value=None))
+    # This time, pretend the AI could not extract anything useful.
+    async def fake_lead_extraction(message, session, user):
+        return None
+
+    real_lead_extraction = lead_services_module.LeadService.lead_extraction
+    lead_services_module.LeadService.lead_extraction = fake_lead_extraction
 
     response = client.post(
         "/leads/extract",
         json={"text": "..."},
         headers=headers,
     )
+
+    lead_services_module.LeadService.lead_extraction = real_lead_extraction
 
     assert response.status_code == 404

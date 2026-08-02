@@ -1,8 +1,9 @@
-# These tests check the /auth endpoints: register, login, and updating
-# your username or email.
+from tests.helpers import make_test_client
 
 
-def test_can_register_a_new_user(client):
+def test_can_register_a_new_user():
+
+    client = make_test_client()
 
     response = client.post(
         "/auth/register",
@@ -12,24 +13,30 @@ def test_can_register_a_new_user(client):
     assert response.status_code == 201
 
 
-def test_cannot_register_with_an_email_already_used(client):
+def test_cannot_register_with_an_email_already_used():
 
-    # Register once.
+    client = make_test_client()
+
     client.post(
         "/auth/register",
         json={"name": "alice", "email": "alice@example.com", "passward": "Password123"},
     )
 
-    # Try to register again with the same email.
     response = client.post(
         "/auth/register",
-        json={"name": "someone_else", "email": "alice@example.com", "passward": "Password123"},
+        json={
+            "name": "someone_else",
+            "email": "alice@example.com",
+            "passward": "Password123",
+        },
     )
 
     assert response.status_code == 400
 
 
-def test_password_must_be_at_least_8_characters(client):
+def test_password_must_be_at_least_8_characters():
+
+    client = make_test_client()
 
     response = client.post(
         "/auth/register",
@@ -39,7 +46,9 @@ def test_password_must_be_at_least_8_characters(client):
     assert response.status_code == 400
 
 
-def test_can_login_with_the_correct_password(client):
+def test_can_login_with_the_correct_password():
+
+    client = make_test_client()
 
     client.post(
         "/auth/register",
@@ -55,7 +64,9 @@ def test_can_login_with_the_correct_password(client):
     assert "access_token" in response.json()
 
 
-def test_cannot_login_with_the_wrong_password(client):
+def test_cannot_login_with_the_wrong_password():
+
+    client = make_test_client()
 
     client.post(
         "/auth/register",
@@ -70,7 +81,9 @@ def test_cannot_login_with_the_wrong_password(client):
     assert response.status_code == 404
 
 
-def test_cannot_login_with_an_email_that_does_not_exist(client):
+def test_cannot_login_with_an_email_that_does_not_exist():
+
+    client = make_test_client()
 
     response = client.post(
         "/auth/login",
@@ -80,7 +93,9 @@ def test_cannot_login_with_an_email_that_does_not_exist(client):
     assert response.status_code == 404
 
 
-def test_can_update_username(client):
+def test_can_update_username():
+
+    client = make_test_client()
 
     client.post(
         "/auth/register",
@@ -95,7 +110,9 @@ def test_can_update_username(client):
     assert response.status_code == 200
 
 
-def test_can_update_email(client):
+def test_can_update_email():
+
+    client = make_test_client()
 
     client.post(
         "/auth/register",
