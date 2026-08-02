@@ -32,11 +32,7 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-llm = (
-    get_llm()
-    .with_structured_output(LeadExtraction, include_raw=True)
-    .with_retry(stop_after_attempt=3)
-)
+llm = get_llm().with_structured_output(LeadExtraction).with_retry(stop_after_attempt=3)
 
 
 extract_lead_chain = prompt | llm

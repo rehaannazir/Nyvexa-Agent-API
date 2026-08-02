@@ -27,7 +27,7 @@ Text:
 
 llm = (
     ChatGoogleGenerativeAI(model=setting.GEMINI_MODEL)
-    .with_structured_output(SummaryExtraction, include_raw=True)
+    .with_structured_output(SummaryExtraction)
     .with_retry(stop_after_attempt=3)
 )
 

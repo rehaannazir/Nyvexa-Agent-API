@@ -1,13 +1,22 @@
-2026-08-02 09:04:30,334 | INFO | nyvexa | Database tables created (or already exist).
-2026-08-02 09:04:30,334 | INFO | nyvexa | Nyvexa Ops API started.
-2026-08-02 09:04:30,702 | INFO | nyvexa | User 'usageuser_859bcb51' registered successfully.
-2026-08-02 09:04:30,705 | INFO | httpx | HTTP Request: POST http://testserver/auth/register "HTTP/1.1 201 Created"
-2026-08-02 09:04:30,982 | INFO | nyvexa | User 'usageuser_859bcb51' logged in successfully.
-2026-08-02 09:04:30,986 | INFO | httpx | HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK"
-2026-08-02 09:04:30,992 | INFO | nyvexa | Path=/leads/extract Prompt=100 Completion=20 Total=120 Latency=5.40ms
-2026-08-02 09:04:30,993 | INFO | httpx | HTTP Request: POST http://testserver/leads/extract "HTTP/1.1 200 OK"
-2026-08-02 09:04:31,040 | INFO | nyvexa | Path=/summary/ Prompt=200 Completion=40 Total=240 Latency=7.10ms
-2026-08-02 09:04:31,041 | INFO | httpx | HTTP Request: POST http://testserver/summary/ "HTTP/1.1 200 OK"
-2026-08-02 09:04:31,107 | INFO | nyvexa | Path=/assistant/ Prompt=350 Completion=70 Total=420 Latency=1.23ms
-2026-08-02 09:04:31,111 | INFO | httpx | HTTP Request: POST http://testserver/assistant/ "HTTP/1.1 200 OK"
-2026-08-02 09:04:31,113 | INFO | nyvexa | Nyvexa Ops API shutting down.
+2026-08-02 09:37:01,427 | INFO | nyvexa | Database tables created (or already exist).
+2026-08-02 09:37:01,427 | INFO | nyvexa | Nyvexa Ops API started.
+2026-08-02 09:37:01,720 | INFO | nyvexa | User 'liveuser_06d0bdb1' registered successfully.
+2026-08-02 09:37:01,721 | INFO | httpx | HTTP Request: POST http://testserver/auth/register "HTTP/1.1 201 Created"
+2026-08-02 09:37:01,962 | INFO | nyvexa | User 'liveuser_06d0bdb1' logged in successfully.
+2026-08-02 09:37:01,986 | INFO | httpx | HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK"
+2026-08-02 09:37:01,993 | INFO | nyvexa | Extracting lead for user 'liveuser_06d0bdb1'.
+2026-08-02 09:37:02,344 | INFO | google_genai.models | AFC is enabled with max remote calls: 10.
+2026-08-02 09:37:04,527 | INFO | nyvexa | Lead #10 saved for user 'liveuser_06d0bdb1'.
+2026-08-02 09:37:04,529 | INFO | nyvexa | Path=/leads/extract Prompt=151 Completion=113 Total=264 Latency=2541.47ms
+2026-08-02 09:37:04,531 | INFO | httpx | HTTP Request: POST http://testserver/leads/extract "HTTP/1.1 200 OK"
+2026-08-02 09:37:04,544 | INFO | nyvexa | Generating summary for user 'liveuser_06d0bdb1'.
+2026-08-02 09:37:04,561 | INFO | google_genai.models | AFC is enabled with max remote calls: 10.
+2026-08-02 09:37:09,849 | INFO | nyvexa | Summary #2 saved for user 'liveuser_06d0bdb1'.
+2026-08-02 09:37:09,849 | INFO | nyvexa | Path=/summary/ Prompt=114 Completion=981 Total=1095 Latency=5315.82ms
+2026-08-02 09:37:09,851 | INFO | httpx | HTTP Request: POST http://testserver/summary/ "HTTP/1.1 200 OK"
+2026-08-02 09:37:09,863 | INFO | nyvexa | Assistant request from session 'liveuser_06d0bdb1'.
+2026-08-02 09:37:12,241 | INFO | nyvexa | Calling tool 'calculator' with args: {'y': 6, 'x': 47, 'op': 'multiply'}
+2026-08-02 09:37:13,151 | INFO | nyvexa | Path=/assistant/ Prompt=2385 Completion=114 Total=2499 Latency=3287.35ms
+2026-08-02 09:37:13,152 | INFO | nyvexa | Assistant response ready for session 'liveuser_06d0bdb1'.
+2026-08-02 09:37:13,154 | INFO | httpx | HTTP Request: POST http://testserver/assistant/ "HTTP/1.1 200 OK"
+2026-08-02 09:37:13,156 | INFO | nyvexa | Nyvexa Ops API shutting down.

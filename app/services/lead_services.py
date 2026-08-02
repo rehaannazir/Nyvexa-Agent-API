@@ -1,13 +1,14 @@
 from typing import Optional
 from fastapi import Request
 from sqlmodel import Session
+from langchain_core.callbacks.usage import get_usage_metadata_callback
 from app.models.user import User
 from app.models.lead import Lead
 from app.repositories.lead_repo import LeadRepo
 from app.schemas.lead_schema import LeadRequest
 from app.chains.extract_lead import extract_lead_chain
 from app.core.logging import logger
-from app.utils.usage import accumulate_usage
+from app.utils.usage import accumulate_usage_from_callback
 
 
 class LeadService:
@@ -19,10 +20,12 @@ class LeadService:
 
         logger.info("Extracting lead for user '%s'.", user.username)
 
-        result = await extract_lead_chain.ainvoke({"text": message.text})
-        accumulate_usage(request, result["raw"])
+        with get_usage_metadata_callback() as callback:
+            response = await extract_lead_chain.ainvoke(
+                {"text": message.text}, config={"callbacks": [callback]}
+            )
 
-        response = result["parsed"]
+        accumulate_usage_from_callback(request, callback)
 
         if not response:
             logger.warning("Lead extraction returned no result for user '%s'.", user.username)
